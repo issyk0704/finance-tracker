@@ -1,5 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TextInput, StyleSheet, AppRegistry, ScrollView, KeyboardAvoidingView, Platform, TouchableOpacity, StatusBar } from 'react-native';
+import { API_BASE_URL } from '@env'; // <-- Import from react-native-dotenv
+import { 
+  View, 
+  Text, 
+  FlatList, 
+  TextInput, 
+  StyleSheet, 
+  AppRegistry, 
+  ScrollView, 
+  KeyboardAvoidingView, 
+  Platform, 
+  TouchableOpacity, 
+  StatusBar 
+} from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
 
@@ -17,7 +30,8 @@ const App = () => {
   // Fetch transactions from the backend
   const fetchTransactions = async () => {
     try {
-      const response = await axios.get('http://192.168.1.198:5000/api/transactions'); // Replace with your IP
+      // Use the base URL from the environment variable
+      const response = await axios.get(`${API_BASE_URL}/api/transactions`);
       setTransactions(response.data);
     } catch (error) {
       console.error(error);
@@ -27,7 +41,7 @@ const App = () => {
   // Add a new transaction
   const addTransaction = async () => {
     try {
-      const response = await axios.post('http://192.168.1.198:5000/api/transactions', {
+      const response = await axios.post(`${API_BASE_URL}/api/transactions`, {
         type,
         category,
         amount: parseFloat(amount),
@@ -43,7 +57,7 @@ const App = () => {
   // Delete a transaction
   const deleteTransaction = async (id) => {
     try {
-      await axios.delete(`http://192.168.1.198:5000/api/transactions/${id}`); // Replace with your IP
+      await axios.delete(`${API_BASE_URL}/api/transactions/${id}`);
       setTransactions(transactions.filter((transaction) => transaction._id !== id));
     } catch (error) {
       console.error(error);
@@ -120,7 +134,9 @@ const App = () => {
           <View style={styles.transactionItem}>
             <View style={styles.transactionDetails}>
               <Text style={styles.transactionCategory}>{item.category}</Text>
-              <Text style={styles.transactionAmount}>${item.amount.toFixed(2)}</Text>
+              <Text style={styles.transactionAmount}>
+                ${item.amount.toFixed(2)}
+              </Text>
               <Text style={styles.transactionType}>({item.type})</Text>
             </View>
             <TouchableOpacity
@@ -254,7 +270,5 @@ const styles = StyleSheet.create({
   },
 });
 
-// Register the root component
 AppRegistry.registerComponent('main', () => App);
-
 export default App;
