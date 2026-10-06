@@ -8,3 +8,7 @@ node_modules/
 
 # Ignore any .env file in any folder
 .env
+
+# Ignore Expo local cache and macOS metadata
+.expo/
+.DS_Store
