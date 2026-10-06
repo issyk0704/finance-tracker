@@ -6,3 +6,5 @@ frontend/.env
 node_modules/
 
 
+# Ignore any .env file in any folder
+.env
